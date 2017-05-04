@@ -1,4 +1,3 @@
-//#include <bits/stdc++.h>
 #include <cstdio>
 #include <iostream>
 #include <vector>
@@ -13,18 +12,27 @@ using namespace std;
 
 typedef unsigned int UINT;
 
-class Node {
-public:
-    UINT attr;
-    string attr_name;
+//typedef vector<struct __arc> ArcSet;
+typedef vector<struct __Vertex>ArcSet;
+typedef struct __Vertex {
     string name;
-};
+    string attr_name;
+    UINT attr;
+    ArcSet Neighborhood;
+} Vertex;
+typedef vector<Vertex> VertexSet;
+typedef unordered_map<UINT, Vertex> VertexSet2;
 
-typedef vector<Node> NODESET;
+typedef struct __arc {
+    Vertex head;
+    Vertex tail;
+} Arc;
+
 typedef pair<int, int> ii;
 typedef pair<string, int> si;
 
-NODESET nodes;
+VertexSet Vertexes;
+VertexSet2 Vertexes2;
 
 vector<vector<int> > adj;
 vector<map<int, int> > attr;
@@ -33,6 +41,13 @@ unordered_map<string, int> compressattrs;
 unordered_map<int, string> uncompnodes;
 unordered_map<int, string> uncompattrs;
 vector<bool> visited;
+
+/*
+ * Prototypes
+ */
+void read_graph(Agraph_t *g);
+void print_vertexes(void);
+ArcSet GetNeighborhood(Agraph_t *g, Agnode_t *u);
 
 void sumpaths(int v, int u){ //v += u
     for(auto q:attr[u]){
@@ -45,7 +60,7 @@ void sumpaths(int v, int u){ //v += u
 }
 
 void search(int v){
-    for(int u=0; u<adj[v].size(); u++){
+    for(int u=0; u < (int)adj[v].size(); u++){
         if(!visited[adj[v][u]])
             search(adj[v][u]);
         sumpaths(v, adj[v][u]);
@@ -56,6 +71,10 @@ void search(int v){
 int main(void)
 {
     auto g = agread(stdin, NULL);
+    read_graph(g);
+    print_vertexes();
+    agwrite(g, stdout);
+    return 0;
     int num = 0;
 
     //compress attributes
@@ -64,18 +83,6 @@ int main(void)
         uncompattrs[num] = a->name;
     }
     num = 0;
-
-    Node v;
-    for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
-        v.name = agnameof(u);
-        nodes.push_back(v);
-    }
-
-    NODESET::iterator it;
-    for( it = nodes.begin(); it < nodes.end(); it++ ) {
-        cout << ' ' << it->name;
-    }
-    return 1;
 
     //initialize vertexes and attributes
     for(auto v = agfstnode(g); v; v=agnxtnode(g, v), num++){
@@ -105,7 +112,7 @@ int main(void)
     }
 
     //count paths
-    for(int v=0; v<adj.size(); v++){
+    for(int v=0; v < (int)adj.size(); v++){
         if(!visited[v]){ //still not counted
             search(v);
         }
@@ -132,4 +139,47 @@ int main(void)
     agwrite(g, stdout);
     agclose(g);
     return 0;
+}
+
+void read_graph(Agraph_t *g)
+{
+    Vertex v;
+    UINT Id;
+
+    Id = 0;
+    for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
+        v.name = agnameof(u);
+        Vertexes.push_back(v);
+        if( Id == 0 ) {
+            Agsym_t *n = agattr(g, AGNODE, "FIM", 0);
+            agxset(agnxtnode(g, u), n, (char*)"100");
+        }
+        Vertexes2[Id++] = v;
+    }
+
+    for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
+        GetNeighborhood(g, u);
+    }
+}
+
+ArcSet GetNeighborhood(Agraph_t *g, Agnode_t *u)
+{
+    Agedge_t *edge;
+    ArcSet as;
+
+    cout << agnameof(u) << " degree=" << agdegree(g, u, FALSE, TRUE) << endl;
+    for( edge = agfstout(g, u); edge; edge = agnxtout(g, edge) ) {
+        cout << "tail=" << agnameof(agtail(edge)) << ", head=" << agnameof(aghead(edge)) << endl;
+    }
+
+    return as;
+}
+
+void print_vertexes(void)
+{
+    //    VertexSet2::iterator it;
+
+    for( auto it : Vertexes2 ) {
+        cout << "name=" << endl;
+    }
 }
