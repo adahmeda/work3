@@ -8,13 +8,13 @@
 
 typedef unsigned int UINT;
 typedef std::vector<UINT> VertexSet;
-typedef std::unordered_map<std::string, UINT> AttrNameSet;
+typedef std::unordered_map<std::string, int> AttributeSet;
 
 typedef struct __Vertex {
   UINT Id;
   UINT degree;
   std::string name;
-  AttrNameSet attributes;
+  AttributeSet attributes;
   VertexSet Neighborhood;
 } Vertex;
 typedef std::unordered_map<UINT, Vertex> VertexSetById;
@@ -25,6 +25,7 @@ typedef std::unordered_map<std::string, UINT> VertexSetByName;
  */
 void ReadGraph(Agraph_t *g);
 void PrintVertexes(void);
-void GetNeighborhood(Agraph_t *g, Agnode_t *u);
+inline void GetNeighborhood(Agraph_t *g, Agnode_t *u);
+inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v);
 
 #endif /*__CONTA_CAMINHOS_H__*/

@@ -13,6 +13,7 @@ void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 
 VertexSetById VertexesById;
 VertexSetByName VertexesByName;
+AttributeSet Attributes;
 
 
 /*_________________________________________________________________________________*/
@@ -28,20 +29,31 @@ int main(void)
 
 void ReadGraph(Agraph_t *g)
 {
-    Vertex v;
+    Agnode_t *v;
+    Vertex u;
     UINT Id;
 
     Id = 0;
-    for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
-        v.Id = Id;
-        v.name = agnameof(u);
-        v.degree = agdegree(g, u, FALSE, TRUE);
-        VertexesById[Id] = v;
-        VertexesByName[v.name] = Id++;
+    for( v = agfstnode(g); v; v = agnxtnode(g, v) ) {
+        u.Id = Id;
+        u.name = agnameof(v);
+        u.degree = agdegree(g, v, FALSE, TRUE);
+        GetAttributes(&u.attributes, g, v);
+        VertexesById[Id] = u;
+        VertexesByName[u.name] = Id++;
     }
 
     for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
         GetNeighborhood(g, u);
+    }
+}
+
+inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v)
+{
+    Agsym_t *sym;
+
+    for( sym = agnxtattr(g, AGNODE, NULL); sym; sym = agnxtattr(g, AGNODE, sym) ) {
+        (*attributes)[sym->name] = atoi(agxget(v, sym));
     }
 }
 
@@ -59,19 +71,23 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 
 void PrintVertexes(void)
 {
-    for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
-        cout << " " << it->first << ":" << VertexesById[it->first].name;
+    for( auto it : VertexesById ) {
+        cout << " " << it.first << ":" << VertexesById[it.first].name;
     }
-    cout << endl;
+    cout << "\n\n";
 
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
         cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].degree << endl;
-        cout << "Neighborhood:" << endl << "\t";
+        cout << "Attributes:" << endl;
+        for( auto it3 : VertexesById ) {
+            cout << "\t" << it3.first;
+        }
+        cout << endl << "Neighborhood:" << endl << "\t";
         for( auto it2 = VertexesById[it->first].Neighborhood.begin();
              it2 != VertexesById[it->first].Neighborhood.end();
              ++it2 ) {
             cout << *it2 << " ";
        }
-        cout << endl;
+       cout << endl;
     }
 }
