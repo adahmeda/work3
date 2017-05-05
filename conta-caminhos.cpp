@@ -21,8 +21,9 @@ int main(void)
 {
     auto g = agread(stdin, NULL);
     ReadGraph(g);
-    PrintVertexes();
     agclose(g);
+
+    PrintVertexes();
 
     return 0;
 }
@@ -71,6 +72,7 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 
 void PrintVertexes(void)
 {
+    cout << "Id:VertexName:Degree" << endl;
     for( auto it : VertexesById ) {
         cout << " " << it.first << ":" << VertexesById[it.first].name;
     }
@@ -78,16 +80,21 @@ void PrintVertexes(void)
 
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
         cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].degree << endl;
-        cout << "Attributes:" << endl;
+        cout << "\tAttributes: Attr:Value" << endl;
         for( auto it3 : VertexesById[it->first].attributes ) {
             cout << "\t" << it3.first << ":" << it3.second;
         }
-        cout << endl << "Neighborhood:" << endl << "\t";
+        cout << endl << "\tNeighborhood: Id of Vertexes" << endl << "\t";
         for( auto it2 = VertexesById[it->first].Neighborhood.begin();
              it2 != VertexesById[it->first].Neighborhood.end();
              ++it2 ) {
-            cout << *it2 << " ";
+            cout << *it2 << ":" << VertexesById[*it2].name << ' ';
        }
        cout << endl;
     }
+}
+
+void CountPaths(void)
+{
+
 }

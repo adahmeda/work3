@@ -13,6 +13,7 @@ typedef std::unordered_map<std::string, int> AttributeSet;
 typedef struct __Vertex {
   UINT Id;
   UINT degree;
+  bool visited;
   std::string name;
   AttributeSet attributes;
   VertexSet Neighborhood;
