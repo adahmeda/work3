@@ -79,8 +79,8 @@ void PrintVertexes(void)
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
         cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].degree << endl;
         cout << "Attributes:" << endl;
-        for( auto it3 : VertexesById ) {
-            cout << "\t" << it3.first;
+        for( auto it3 : VertexesById[it->first].attributes ) {
+            cout << "\t" << it3.first << ":" << it3.second;
         }
         cout << endl << "Neighborhood:" << endl << "\t";
         for( auto it2 = VertexesById[it->first].Neighborhood.begin();
