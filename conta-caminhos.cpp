@@ -1,28 +1,7 @@
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <string>
 #include <graphviz/cgraph.h>
+#include "conta-caminhos.h"
 
 using namespace std;
-
-typedef unsigned int UINT;
-typedef vector<UINT> VertexSet;
-typedef unordered_map<string, UINT> AttrNameSet;
-
-typedef struct __Vertex {
-    UINT Id;
-    UINT degree;
-    string name;
-    AttrNameSet attributes;
-    VertexSet Neighborhood;
-} Vertex;
-typedef unordered_map<UINT, Vertex> VertexSetById;
-typedef unordered_map<string, UINT> VertexSetByName;
-
-VertexSetById VertexesById;
-VertexSetByName VertexesByName;
-
 
 /*
  * Prototypes
@@ -30,6 +9,10 @@ VertexSetByName VertexesByName;
 void ReadGraph(Agraph_t *g);
 void PrintVertexes(void);
 void GetNeighborhood(Agraph_t *g, Agnode_t *u);
+
+
+VertexSetById VertexesById;
+VertexSetByName VertexesByName;
 
 
 /*_________________________________________________________________________________*/
