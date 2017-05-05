@@ -11,7 +11,7 @@
 using namespace std;
 
 typedef unsigned int UINT;
-typedef vector<UINT> ArcSet;
+typedef vector<UINT> VertexSet;
 typedef unordered_map<string, UINT> AttrNameSet;
 
 typedef struct __Vertex {
@@ -19,13 +19,11 @@ typedef struct __Vertex {
     UINT degree;
     string name;
     AttrNameSet attributes;
-    ArcSet Neighborhood;
+    VertexSet Neighborhood;
 } Vertex;
-typedef vector<Vertex> VertexSet;
 typedef unordered_map<UINT, Vertex> VertexSetById;
 typedef unordered_map<string, UINT> VertexSetByName;
 
-VertexSet Vertexes;
 VertexSetById VertexesById;
 VertexSetByName VertexesByName;
 
@@ -35,7 +33,7 @@ VertexSetByName VertexesByName;
  */
 void ReadGraph(Agraph_t *g);
 void PrintVertexes(void);
-ArcSet GetNeighborhood(Agraph_t *g, Agnode_t *u);
+void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 
 
 
@@ -151,7 +149,7 @@ void ReadGraph(Agraph_t *g)
     for( Agnode_t *u = agfstnode(g); u; u = agnxtnode(g, u) ) {
         v.Id = Id;
         v.name = agnameof(u);
-        Vertexes.push_back(v);
+        v.degree = agdegree(g, u, FALSE, TRUE);
         VertexesById[Id] = v;
         VertexesByName[v.name] = Id++;
     }
@@ -161,23 +159,16 @@ void ReadGraph(Agraph_t *g)
     }
 }
 
-inline ArcSet GetNeighborhood(Agraph_t *g, Agnode_t *u)
+inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 {
     Agedge_t *edge;
-    ArcSet as;
-    Vertex tail, head;
-    UINT Id;
+    UINT tailID, headID;
 
     for( edge = agfstout(g, u); edge; edge = agnxtout(g, edge) ) {
-        Id = VertexesByName[agnameof(agtail(edge))];
-        tail = VertexesById[Id];
-        tail.degree = (UINT)agdegree(g, u, FALSE, TRUE);
-
-        Id = VertexesByName[agnameof(aghead(edge))];
-        tail.Neighborhood.push_back(Id);
+        tailID = VertexesByName[agnameof(agtail(edge))];
+        headID = VertexesByName[agnameof(aghead(edge))];
+        VertexesById[tailID].Neighborhood.push_back(headID);
     }
-
-    return as;
 }
 
 void PrintVertexes(void)
@@ -185,6 +176,15 @@ void PrintVertexes(void)
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
         cout << " " << it->first << ":" << VertexesById[it->first].name;
     }
+    cout << endl;
 
-
+    for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
+        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].degree << endl;
+        cout << "Neighborhood:" << endl;
+        for( auto it2 = VertexesById[it->first].Neighborhood.begin();
+             it2 != VertexesById[it->first].Neighborhood.end();
+             ++it2 ) {
+            cout << "\t" << *it2 << endl;
+       }
+    }
 }
