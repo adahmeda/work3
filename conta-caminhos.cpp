@@ -23,7 +23,8 @@ int main(void)
     ReadGraph(g);
     agclose(g);
 
-    PrintVertexes();
+    CountPaths();
+    //PrintVertexes();
 
     return 0;
 }
@@ -96,5 +97,62 @@ void PrintVertexes(void)
 
 void CountPaths(void)
 {
+    Vertex *v;
 
+    for( auto it : VertexesById ) {
+        v = &VertexesById[it.first];
+        v->Set = 0;
+        v->Parent = NULL;
+    }
+
+    for( auto it : VertexesById ) {
+        if( VertexesById[it.first].Set == 0 ) {
+            Count(&(VertexesById[it.first]));
+        }
+    }
+}
+
+void Count(Vertex *r)
+{
+    Vertex *v;
+
+    cout << "raiz=" << r->name << ".Set=" << r->Set << endl << "\tVizinhança: ";
+    for( auto it : VertexesById[r->Id].Neighborhood ) {
+        v = &VertexesById[it];
+        cout << v->name << ' ';
+    }
+    cout << endl << endl;
+
+    r->Set = 1;
+    for( auto it : VertexesById[r->Id].Neighborhood ) {
+        v = &VertexesById[it];
+        cout << '\t' << r->name << "-->" << v->name << ".Set=" <<  v->Set << endl;
+        if( v->Set == 0 ) {
+            cout << "\tprocesse(" << r->name << "-->" << v->name << ")" << endl;
+            GetAttributes(r, v);
+            ShowAttributes(&v->attributes);
+        } else if( v->Set == 1 ) {
+            v->Parent = r;
+            cout << "\tCalling recursion..." << endl;
+            Count(v);
+        }
+    }
+    cout << r->name << endl;
+    r->Set = 2;
+}
+
+inline void ShowAttributes(AttributeSet *as)
+{
+    cout << "\tAttributes: ";
+    for( auto it : *as ) {
+        cout << it.first << ":" << it.second << ", ";
+    }
+    cout << endl;
+}
+
+inline void GetAttributes(Vertex *r, Vertex *v)
+{
+    for( auto it : v->attributes ) {
+        if( it.second
+    }
 }
