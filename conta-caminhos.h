@@ -26,6 +26,7 @@ typedef std::unordered_map<std::string, UINT> VertexSetByName;
  * Prototypes
  */
 void ReadGraph(Agraph_t *g);
+void PrintVertexesDbg(void);
 void PrintVertexes(void);
 inline void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v);

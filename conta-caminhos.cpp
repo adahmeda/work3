@@ -24,10 +24,11 @@ int main(void)
     agclose(g);
 
     CountPaths();
-    //PrintVertexes();
+    //PrintVertexesDbg();
 
     return 0;
 }
+
 
 void ReadGraph(Agraph_t *g)
 {
@@ -71,7 +72,7 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
     }
 }
 
-void PrintVertexes(void)
+void PrintVertexesDbg(void)
 {
     cout << "Id:VertexName:OutDegree" << endl;
     for( auto it : VertexesById ) {
@@ -162,7 +163,7 @@ inline void GetAttributes(Vertex *r, Vertex *v)
                     r->attributes[it.first] = it.second + 1;
                 else
                     r->attributes[it.first] = 1;
-            }else { /* child vertex is not a sink. */
+            }else { /* vertex child is not a sink. */
                 if( r->attributes[it.first] >= 1 )
                     r->attributes[it.first] += it.second;
                 else
