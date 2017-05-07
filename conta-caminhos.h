@@ -2,8 +2,8 @@
 #define __CONTA_CAMINHOS_H__   1
 
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 typedef unsigned int UINT;
@@ -26,14 +26,12 @@ typedef std::unordered_map<std::string, UINT> VertexSetByName;
  * Prototypes
  */
 void ReadGraph(Agraph_t *g);
-void PrintVertexesDbg(void);
 void PrintVertexes(void);
 inline void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v);
-void CountPaths(void);
-void Count(Vertex *x);
-inline void ShowAttributes(Vertex *v);
 inline void GetAttributes(Vertex *r, Vertex *v);
+void CountPaths(void);
+void Count(Vertex *r);
 
 
 #endif /*__CONTA_CAMINHOS_H__*/

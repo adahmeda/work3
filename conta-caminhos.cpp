@@ -3,28 +3,25 @@
 
 using namespace std;
 
-/*
- * Prototypes
- */
-void ReadGraph(Agraph_t *g);
-void PrintVertexes(void);
-void GetNeighborhood(Agraph_t *g, Agnode_t *u);
-
-
 VertexSetById VertexesById;
 VertexSetByName VertexesByName;
 AttributeSet Attributes;
+string GraphName;
 
 
 /*_________________________________________________________________________________*/
 int main(void)
 {
-    auto g = agread(stdin, NULL);
+    Agraph_t *g;
+
+    g = agread(stdin, NULL);
+    GraphName = agnameof(g);
+
     ReadGraph(g);
     agclose(g);
 
     CountPaths();
-    //PrintVertexesDbg();
+    PrintVertexes();
 
     return 0;
 }
@@ -72,30 +69,6 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
     }
 }
 
-void PrintVertexesDbg(void)
-{
-    cout << "Id:VertexName:OutDegree" << endl;
-    for( auto it : VertexesById ) {
-        cout << " " << it.first << ":" << VertexesById[it.first].name;
-    }
-    cout << "\n\n";
-
-    for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
-        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].OutDegree << endl;
-        cout << "\tAttributes: Attr:Value" << endl;
-        for( auto it3 : VertexesById[it->first].attributes ) {
-            cout << "\t" << it3.first << ":" << it3.second;
-        }
-        cout << endl << "\tNeighborhood: Id of Vertexes" << endl << "\t";
-        for( auto it2 = VertexesById[it->first].Neighborhood.begin();
-             it2 != VertexesById[it->first].Neighborhood.end();
-             ++it2 ) {
-            cout << *it2 << ":" << VertexesById[*it2].name << ' ';
-       }
-       cout << endl;
-    }
-}
-
 void CountPaths(void)
 {
     Vertex *v;
@@ -117,41 +90,19 @@ void Count(Vertex *r)
 {
     Vertex *v;
 
-    cout << "raiz=" << r->name << ".Set=" << r->Set << endl << "\tVizinhança: ";
-    for( auto it : VertexesById[r->Id].Neighborhood ) {
-        v = &VertexesById[it];
-        cout << v->name << ' ';
-    }
-    ShowAttributes(r);
-    cout << endl << endl;
-
     r->Set = 1;
     for( auto it : VertexesById[r->Id].Neighborhood ) {
         v = &VertexesById[it];
-        cout << '\t' << r->name << "-->" << v->name << ".Set=" <<  v->Set << endl;
         if( v->Set == 0 ) {
-            cout << "\tprocesse(" << r->name << "-->" << v->name << ")" << endl;
             GetAttributes(r, v);
         } else if( v->Set == 1 ) {
             v->Parent = r;
-            cout << "\tCalling recursion..." << endl;
             Count(v);
         } else if( v->Set == 2 ) {
             GetAttributes(r, v);
         }
     }
-    cout << r->name << endl;
-    ShowAttributes(r);
     r->Set = 2;
-}
-
-inline void ShowAttributes(Vertex *v)
-{
-    cout << "\tAttributes: " << v->name << ' ';
-    for( auto it : v->attributes ) {
-        cout << it.first << ":" << it.second << ", ";
-    }
-    cout << endl;
 }
 
 inline void GetAttributes(Vertex *r, Vertex *v)
@@ -170,5 +121,34 @@ inline void GetAttributes(Vertex *r, Vertex *v)
                     r->attributes[it.first] = it.second;
             }
         }
+    }
+}
+
+void PrintVertexes(void)
+{
+    Vertex *v;
+    AttributeSet::iterator each_attr;
+    int count;
+
+    cout << "strict digraph resultado_" << GraphName << " {" << endl;
+    for( auto each_v : VertexesById ) {
+        v = &VertexesById[each_v.first];
+        cout << '\t' << v->name;
+        each_attr = v->attributes.begin();
+        cout << " [";
+        count = 0;
+        if( each_attr->second > 0 ) {
+            cout << each_attr->first << '=' << each_attr->second;
+            ++count;
+        }
+        for( ++each_attr; each_attr != v->attributes.end(); ++each_attr ) {
+            if( each_attr->second > 0 ) {
+                if( count > 0 )
+                    cout << ',';
+                cout << each_attr->first << '=' << each_attr->second;
+                ++count;
+            }
+        }
+        cout << "];" << endl;
     }
 }
