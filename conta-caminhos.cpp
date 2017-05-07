@@ -134,6 +134,7 @@ void PrintVertexes(void)
     for( auto each_v : VertexesById ) {
         v = &VertexesById[each_v.first];
         cout << '\t' << v->name;
+        // Show attributes.
         each_attr = v->attributes.begin();
         cout << " [";
         count = 0;
@@ -150,5 +151,12 @@ void PrintVertexes(void)
             }
         }
         cout << "];" << endl;
+        cout << flush;
+        // Show vertexes and arcs.
+        for( auto each_arc : v->Neighborhood ) {
+            cout << '\t' << '"' << v->name << "\" -> \"" << VertexesById[each_arc].name << "\";" << endl;
+        }
     }
+    cout << '}' << endl;
+    cout << flush;
 }
