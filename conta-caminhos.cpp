@@ -39,7 +39,7 @@ void ReadGraph(Agraph_t *g)
     for( v = agfstnode(g); v; v = agnxtnode(g, v) ) {
         u.Id = Id;
         u.name = agnameof(v);
-        u.InDegree = agdegree(g, v, true, false);
+        u.OutDegree = agdegree(g, v, false, true);
         GetAttributes(&u.attributes, g, v);
         VertexesById[Id] = u;
         VertexesByName[u.name] = Id++;
@@ -73,14 +73,14 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 
 void PrintVertexes(void)
 {
-    cout << "Id:VertexName:InDegree" << endl;
+    cout << "Id:VertexName:OutDegree" << endl;
     for( auto it : VertexesById ) {
         cout << " " << it.first << ":" << VertexesById[it.first].name;
     }
     cout << "\n\n";
 
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
-        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].InDegree << endl;
+        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].OutDegree << endl;
         cout << "\tAttributes: Attr:Value" << endl;
         for( auto it3 : VertexesById[it->first].attributes ) {
             cout << "\t" << it3.first << ":" << it3.second;
@@ -157,14 +157,16 @@ inline void GetAttributes(Vertex *r, Vertex *v)
 {
     for( auto it : v->attributes ) {
         if( it.second != 0 ) {
-
-            if( r->attributes[it.first] >= 1 ) {
-                r->attributes[it.first] = it.second + 1;
-            }else {
-                if( it.second == 1 )
-                    r->attributes[it.first] = 1;
-                else if( it.second > 1 )
+            if( v->OutDegree == 0 ) {
+                if( r->attributes[it.first] >= 1 )
                     r->attributes[it.first] = it.second + 1;
+                else
+                    r->attributes[it.first] = 1;
+            }else { /* child vertex is not a sink. */
+                if( r->attributes[it.first] >= 1 )
+                    r->attributes[it.first] += it.second;
+                else
+                    r->attributes[it.first] = it.second;
             }
         }
     }
