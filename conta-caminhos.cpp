@@ -136,22 +136,24 @@ void PrintVertexes(void)
         cout << "\t\"" << v->name << '"';
         // Show attributes.
         each_attr = v->attributes.begin();
-        cout << " [";
         count = 0;
         if( each_attr->second > 0 ) {
-            cout << each_attr->first << '=' << each_attr->second;
+            cout << " [" << each_attr->first << '=' << each_attr->second;
             ++count;
         }
         for( ++each_attr; each_attr != v->attributes.end(); ++each_attr ) {
             if( each_attr->second > 0 ) {
-                if( count > 0 )
+                if( count == 0 )
+                    cout << " [";
+                else
                     cout << ',';
                 cout << each_attr->first << '=' << each_attr->second;
                 ++count;
             }
         }
-        cout << "];" << endl;
-        cout << flush;
+        if( count > 0 )
+            cout << "];";
+        cout << endl;
         // Show vertexes and arcs.
         for( auto each_arc : v->Neighborhood ) {
             cout << '\t' << '"' << v->name << "\" -> \"" << VertexesById[each_arc].name << "\";" << endl;
