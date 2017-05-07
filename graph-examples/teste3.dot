@@ -1,0 +1,24 @@
+strict digraph "velha" {
+	"OXXXOOXOO" [O=1];
+	"OXX.XOXOO" [X=1];
+	"XXXO.OXOO" [X=1];
+	".XXOXOXOO" [X=1];
+	"XXX.OOXOO" [X=1];
+	"........." -> ".....O...";
+	".....O..." -> ".X...O...";
+	".X...O..." -> ".X...O.O.";
+	".X...O.O." -> ".XX..O.O.";
+	".XX..O.O." -> ".XX..O.OO";
+	".XX..O.OO" -> ".XX..OXOO";
+	".XX..OXOO" -> "OXX..OXOO"
+	".XX..OXOO" -> ".XXO.OXOO"
+	".XX..OXOO" -> ".XX.OOXOO"
+	"OXX..OXOO" -> "OXXX.OXOO"
+	"OXX..OXOO" -> "OXX.XOXOO"
+	"OXXX.OXOO" -> "OXXXOOXOO"
+	".XXO.OXOO" -> "XXXO.OXOO"
+	".XXO.OXOO" -> ".XXOXOXOO"
+	".XX.OOXOO" -> "XXX.OOXOO"
+	".XX.OOXOO" -> ".XXXOOXOO"
+	".XXXOOXOO" -> "OXXXOOXOO"
+}
