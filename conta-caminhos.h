@@ -12,7 +12,7 @@ typedef std::unordered_map<std::string, int> AttributeSet;
 
 typedef struct __Vertex {
   UINT Id;
-  UINT degree;
+  UINT InDegree;
   int Set;
   struct __Vertex *Parent;
   std::string name;

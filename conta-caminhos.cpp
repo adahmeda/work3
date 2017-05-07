@@ -39,7 +39,7 @@ void ReadGraph(Agraph_t *g)
     for( v = agfstnode(g); v; v = agnxtnode(g, v) ) {
         u.Id = Id;
         u.name = agnameof(v);
-        u.degree = agdegree(g, v, FALSE, TRUE);
+        u.InDegree = agdegree(g, v, true, false);
         GetAttributes(&u.attributes, g, v);
         VertexesById[Id] = u;
         VertexesByName[u.name] = Id++;
@@ -73,14 +73,14 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 
 void PrintVertexes(void)
 {
-    cout << "Id:VertexName:Degree" << endl;
+    cout << "Id:VertexName:InDegree" << endl;
     for( auto it : VertexesById ) {
         cout << " " << it.first << ":" << VertexesById[it.first].name;
     }
     cout << "\n\n";
 
     for( auto it = VertexesById.begin(); it != VertexesById.end(); ++it ) {
-        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].degree << endl;
+        cout << " " << VertexesById[it->first].Id << ":" << VertexesById[it->first].name << ":" << VertexesById[it->first].InDegree << endl;
         cout << "\tAttributes: Attr:Value" << endl;
         for( auto it3 : VertexesById[it->first].attributes ) {
             cout << "\t" << it3.first << ":" << it3.second;
@@ -157,6 +157,7 @@ inline void GetAttributes(Vertex *r, Vertex *v)
 {
     for( auto it : v->attributes ) {
         if( it.second != 0 ) {
+
             if( r->attributes[it.first] >= 1 ) {
                 r->attributes[it.first] = it.second + 1;
             }else {
