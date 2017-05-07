@@ -31,7 +31,7 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v);
 void CountPaths(void);
 void Count(Vertex *x);
-inline void ShowAttributes(AttributeSet *as);
+inline void ShowAttributes(Vertex *v);
 inline void GetAttributes(Vertex *r, Vertex *v);
 
 

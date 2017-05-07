@@ -121,6 +121,7 @@ void Count(Vertex *r)
         v = &VertexesById[it];
         cout << v->name << ' ';
     }
+    ShowAttributes(r);
     cout << endl << endl;
 
     r->Set = 1;
@@ -130,21 +131,23 @@ void Count(Vertex *r)
         if( v->Set == 0 ) {
             cout << "\tprocesse(" << r->name << "-->" << v->name << ")" << endl;
             GetAttributes(r, v);
-            ShowAttributes(&v->attributes);
         } else if( v->Set == 1 ) {
             v->Parent = r;
             cout << "\tCalling recursion..." << endl;
             Count(v);
+        } else if( v->Set == 2 ) {
+            GetAttributes(r, v);
         }
     }
     cout << r->name << endl;
+    ShowAttributes(r);
     r->Set = 2;
 }
 
-inline void ShowAttributes(AttributeSet *as)
+inline void ShowAttributes(Vertex *v)
 {
-    cout << "\tAttributes: ";
-    for( auto it : *as ) {
+    cout << "\tAttributes: " << v->name << ' ';
+    for( auto it : v->attributes ) {
         cout << it.first << ":" << it.second << ", ";
     }
     cout << endl;
@@ -153,6 +156,15 @@ inline void ShowAttributes(AttributeSet *as)
 inline void GetAttributes(Vertex *r, Vertex *v)
 {
     for( auto it : v->attributes ) {
-        if( it.second
+        if( it.second != 0 ) {
+            if( r->attributes[it.first] >= 1 ) {
+                r->attributes[it.first] = it.second + 1;
+            }else {
+                if( it.second == 1 )
+                    r->attributes[it.first] = 1;
+                else if( it.second > 1 )
+                    r->attributes[it.first] = it.second + 1;
+            }
+        }
     }
 }
