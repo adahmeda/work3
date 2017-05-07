@@ -133,7 +133,7 @@ void PrintVertexes(void)
     cout << "strict digraph resultado_" << GraphName << " {" << endl;
     for( auto each_v : VertexesById ) {
         v = &VertexesById[each_v.first];
-        cout << '\t' << v->name;
+        cout << "\t\"" << v->name << '"';
         // Show attributes.
         each_attr = v->attributes.begin();
         cout << " [";
