@@ -31,7 +31,7 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u);
 inline void GetAttributes(AttributeSet *attributes, Agraph_t *g, Agnode_t *v);
 inline void GetAttributes(Vertex *r, Vertex *v);
 void CountPaths(void);
-void Count(Vertex *r);
-
+bool Count(Vertex *r);
+inline bool CheckChildCondition(Vertex *r, Vertex *v);
 
 #endif /*__CONTA_CAMINHOS_H__*/

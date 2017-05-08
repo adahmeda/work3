@@ -72,6 +72,8 @@ inline void GetNeighborhood(Agraph_t *g, Agnode_t *u)
 void CountPaths(void)
 {
     Vertex *v;
+    UINT count;
+    UINT n;
 
     for( auto it : VertexesById ) {
         v = &VertexesById[it.first];
@@ -79,14 +81,19 @@ void CountPaths(void)
         v->Parent = NULL;
     }
 
-    for( auto it : VertexesById ) {
-        if( VertexesById[it.first].Set == 0 ) {
-            Count(&(VertexesById[it.first]));
+    count = 0;
+    n = (UINT)VertexesById.size();
+    while ( count != n ) {
+        for( auto it : VertexesById ) {
+            v = &VertexesById[it.first];
+            if( v->Set == 0 ) {
+                if( Count(v) ) ++count;
+            }
         }
     }
 }
 
-void Count(Vertex *r)
+bool Count(Vertex *r)
 {
     Vertex *v;
 
@@ -94,6 +101,10 @@ void Count(Vertex *r)
     for( auto it : VertexesById[r->Id].Neighborhood ) {
         v = &VertexesById[it];
         if( v->Set == 0 ) {
+            if( CheckChildCondition(r, v) ) {
+                r->Set = 0;
+                return false;
+            }
             GetAttributes(r, v);
         } else if( v->Set == 1 ) {
             v->Parent = r;
@@ -103,6 +114,18 @@ void Count(Vertex *r)
         }
     }
     r->Set = 2;
+
+    return true;
+}
+
+inline bool CheckChildCondition(Vertex *r, Vertex *v)
+{
+    for( auto each_attr : v->attributes ) {
+        if( each_attr.second != 0 )
+            return false;
+    }
+
+    return true;
 }
 
 inline void GetAttributes(Vertex *r, Vertex *v)
