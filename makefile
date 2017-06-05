@@ -2,8 +2,8 @@ CC=g++
 
 CPPFLAGS=-std=c++11 -Wall
 
-conta-caminhos: conta-caminhos.cpp
-	$(CC) $(CPPFLAGS) conta-caminhos.cpp -o conta-caminhos -l cgraph
+fortes: fortes.cpp
+	$(CC) $(CPPFLAGS) fortes.cpp -o fortes -l cgraph
 
 clean:
-	-rm -rf conta-caminhos
+	-rm -rf fortes
