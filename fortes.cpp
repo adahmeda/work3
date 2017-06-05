@@ -1,5 +1,5 @@
 #include <graphviz/cgraph.h>
-#include "conta-caminhos.h"
+#include "fortes.h"
 
 using namespace std;
 
