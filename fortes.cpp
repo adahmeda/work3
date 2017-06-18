@@ -81,46 +81,44 @@ void Graph::GetStrongConnectedComponents(int u, int pre[], int low[], Stack *s, 
 {
   static int time = 0;
 
-  // Initialize discovery time and low point value
   pre[u] = low[u] = ++time;
   s->push(u);
   IsInStack[u] = true;
 
-  // Go through all vertices adjacent to this
+  // Interaja com todos os vértices adjacentes à u
   list<int>::iterator i;
   for( i = adj[u].begin(); i != adj[u].end(); ++i ) {
-    int v = *i;  // v is current adjacent of 'u'
+    int v = *i;  // v é o vértice adjacente corrente à u
 
-    // If v is not visited yet, then recur for it
     if( pre[v] == NOT_VISITED ) {
       GetStrongConnectedComponents(v, pre, low, s, IsInStack);
 
-      // Check if the subtree rooted with 'v' has a
-      // connection to one of the ancestors of 'u'
-      // Case 1 (per above preussion on Pre and Low value)
+      /*
+       * Verifique se a sub árvore enraizada em v existe
+       * ancestral de u, otendo o mínimo.
+       */
       low[u]  = min(low[u], low[v]);
     }
 
-    // Update low value of 'u' only of 'v' is still in stack
-    // (i.e. it's a back edge, not cross edge).
-    // Case 2 (per above discussion on Disc and Low value)
+    /*
+     * Atualize low point de u somente se v está na apilha
+     */
     else if( IsInStack[v] == true )
       low[u]  = min(low[u], pre[v]);
   }
 
-  // head node found, pop the stack and print an SCC
-  int w = 0;  // To store stack extracted vertices
+  int w = 0;
   static int count_cluster = 1;
   if( low[u] == pre[u] ) {
     cout << "subgraph cluster" << count_cluster++ << " {" << endl;
     while( s->top() != u ) {
       w = (int) s->top();
-      cout << "\t\"" << VertexesById[w].name << "\";" << endl;
+      cout << '\t' << VertexesById[w].name << ";" << endl;
       IsInStack[w] = false;
       s->pop();
     }
     w = (int) s->top();
-    cout << "\t\"" << VertexesById[w].name << "\";" << endl;
+    cout << '\t' << VertexesById[w].name << ";" << endl;
     IsInStack[w] = false;
     s->pop();
     cout << "}" << endl;
@@ -134,7 +132,6 @@ void Graph::GetAllStrongConnectedComponents(void)
   bool *isInStack = new bool[V];
   Stack *s = new Stack();
 
-  // Initialize disc and low, and stackMember arrays
   for (int i = 0; i < V; i++)
     {
       pre[i] = NOT_VISITED;
@@ -142,8 +139,6 @@ void Graph::GetAllStrongConnectedComponents(void)
       isInStack[i] = false;
     }
 
-  // Call the recursive helper function to find strongly
-  // connected components in DFS tree with vertex 'i'
   for (int i = 0; i < V; i++)
     if( pre[i] == NOT_VISITED )
       GetStrongConnectedComponents(i, pre, low, s, isInStack);
