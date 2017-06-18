@@ -1,0 +1,51 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  fortes.cpp
+ *
+ *    Description:  This graph works is to find the connected components of a graph,
+ *                  it can be connect or not the input graph.
+ *
+ *        Version:  1.0
+ *        Created:  18/06/17 15:44:11
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Alessandro Elias, GRR20110589, ae11@c3sl.ufpr.br
+ *        Company:  C3SL
+ *
+ * =====================================================================================
+ */
+
+#ifndef __FORTES_H__
+#define __FORTES_H__
+
+#include <iostream>
+#include <list>
+#include <stack>
+#include <string>
+#include <graphviz/cgraph.h>
+
+#define NOT_VISITED  -1
+
+typedef std::list<int> AdjacentSet;
+typedef std::stack<int> Stack;
+class G
+{
+  int V; // number of vertexes
+  AdjacentSet *adj;
+  string
+
+  void GetStrongConnectedComponents(int u, int pre[], int low[], Stack *s, bool IsInStack[]);
+
+ public:
+  G(int V) {
+	this->V = V;
+	adj = new AdjacentSet[V];
+  }
+
+  void addEdge(int v, int w) { adj[v].push_back(w);  }
+  void GetAllStrongConnectedComponents(void);
+};
+
+#endif /* __FORTES_H__ */

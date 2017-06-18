@@ -1,0 +1,24 @@
+strict digraph "velha" {
+	"16OXXXOOXOO" [O=1];
+	"15OXX.XOXOO" [X=1];
+	"19XXXO.OXOO" [X=1];
+	"18.XXOXOXOO" [X=1];
+	"17XXX.OOXOO" [X=1];
+	"1........." -> "2.....O...";
+	"2.....O..." -> "3.X...O...";
+	"3.X...O..." -> "4.X...O.O.";
+	"4.X...O.O." -> "5.XX..O.O.";
+	"5.XX..O.O." -> "6.XX..O.OO";
+	"6.XX..O.OO" -> "7.XX..OXOO";
+	"7.XX..OXOO" -> "8OXX..OXOO"
+	"7.XX..OXOO" -> "10.XXO.OXOO"
+	"7.XX..OXOO" -> "11.XX.OOXOO"
+	"8OXX..OXOO" -> "9OXXX.OXOO"
+	"8OXX..OXOO" -> "15OXX.XOXOO"
+	"9OXXX.OXOO" -> "16OXXXOOXOO"
+	"10.XXO.OXOO" -> "19XXXO.OXOO"
+	"10.XXO.OXOO" -> "18.XXOXOXOO"
+	"11.XX.OOXOO" -> "17XXX.OOXOO"
+	"11.XX.OOXOO" -> "12.XXXOOXOO"
+	"12.XXXOOXOO" -> "16OXXXOOXOO"
+}
