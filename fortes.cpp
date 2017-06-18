@@ -115,12 +115,12 @@ void Graph::GetStrongConnectedComponents(int u, int pre[], int low[], Stack *s, 
     cout << "subgraph cluster" << count_cluster++ << " {" << endl;
     while( s->top() != u ) {
       w = (int) s->top();
-      cout << '\t' << VertexesById[w].name << ";" << endl;
+      cout << "\t\"" << VertexesById[w].name << "\";" << endl;
       IsInStack[w] = false;
       s->pop();
     }
     w = (int) s->top();
-    cout << '\t' << VertexesById[w].name << ";" << endl;
+    cout << "\t\"" << VertexesById[w].name << "\";" << endl;
     IsInStack[w] = false;
     s->pop();
     cout << "}" << endl;
